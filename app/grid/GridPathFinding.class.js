@@ -27,8 +27,6 @@ class GridPathFinding {
             helperGrid.push(helperRow)
         }
 
-        console.log('helperGrid', helperGrid)
-
         return helperGrid
     }
 
@@ -49,8 +47,6 @@ class GridPathFinding {
             ...inColRow,
             pathFindingGrid
         )
-
-        console.log('helperPath', helperPath)
 
         return helperPath
     }

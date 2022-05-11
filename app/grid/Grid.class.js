@@ -1,6 +1,7 @@
 import { generateQueryConstructor } from "../utils/object.utils.js"
 import GridCell from './GridCell.class.js'
 import GridDraw from './GridDraw.class.js'
+import renderEvents from "./../panel/panel-events.methods.js"
 
 class Grid {
 
@@ -16,34 +17,74 @@ class Grid {
         return document.querySelector( this.settings.svgSelector )
     }
 
+    get containerWidthElement() {
+        return document.querySelector( this.settings.containerWidthSelector )
+    }
+
+    get containerHeightElement() {
+        return document.querySelector( this.settings.containerHeightSelector )
+    }
+
+    get cellSizeElement() {
+        return document.querySelector( this.settings.cellSizeSelector )
+    }
+
+    get imageImportElement() {
+        return document.querySelector( this.settings.imageImportSelector )
+    }
+
+    get imageRemoveElement() {
+        return document.querySelector( this.settings.imageRemoveSelector )
+    }
+
+    get fileImportElement() {
+        return document.querySelector( this.settings.fileImportSelector )
+    }
+
+    get fileExportElement() {
+        return document.querySelector( this.settings.fileExportSelector )
+    }
+
+    get gridPathElement() {
+        return document.querySelector( this.settings.gridPathSelector )
+    }
+
+    get gridDraw() {
+        return new GridDraw({ grid: this })
+    }
+
     build() {
         this.#buildGridLayout()
         this.#buildGridCells()
-        this.#buildGridSvg()
+
+        renderEvents.call(this)
     }
 
     #buildGridLayout() {
-        const { settings, gridElement } = this
-        const { cellSize, borderSize, borderColor } = settings
-        const { innerWidth, innerHeight } = window
+        const { settings, gridElement, containerWidthElement, containerHeightElement, cellSizeElement, gridPathElement, gridDraw } = this
+        const { cellSize, borderSize, borderColor, containerWidth, containerHeight, imageBackground } = settings
 
-        const fullCellSize = cellSize + borderSize * 2
-        
-        this.numCols = Math.floor(innerWidth / fullCellSize)
-        this.numRows = Math.floor(innerHeight / fullCellSize)
+        containerWidthElement.value = containerWidthElement.value ? containerWidthElement.value : containerWidth
+        containerHeightElement.value = containerHeightElement.value ? containerHeightElement.value : containerHeight
+        cellSizeElement.value = cellSizeElement.value ? cellSizeElement.value : cellSize
+
+        const fullCellSize = parseInt(cellSizeElement.value) + borderSize * 2
+
+        // if (gridPathElement.value) {
+        //     const arrayMatrix = JSON.parse(gridPathElement.value)
+        //     this.numCols = arrayMatrix[0].length
+        //     this.numRows = arrayMatrix.length
+        // } else {
+            this.numCols = Math.ceil(parseInt(containerWidthElement.value) / fullCellSize)
+            this.numRows = Math.ceil(parseInt(containerHeightElement.value) / fullCellSize)
+        // }
 
         this.gridWidth = this.numCols * fullCellSize
         this.gridHeight = this.numRows * fullCellSize
 
-        this.gridMarginX = (innerWidth - this.gridWidth - borderSize * 2) / 2
-        this.gridMarginY = (innerHeight - this.gridHeight - borderSize * 2) / 2
-
         Object.assign( gridElement.style, {
             width: `${ this.gridWidth }px`,
             height: `${ this.gridHeight }px`,
-
-            marginLeft: `${ this.gridMarginX }px`,
-            marginTop: `${ this.gridMarginY }px`,
 
             border: `${ borderSize }px solid ${ borderColor }`,
         })
@@ -51,36 +92,29 @@ class Grid {
     }
 
     #buildGridCells() {
-        const { numRows, numCols } = this
+        const { numRows, numCols, gridPathElement } = this
+        
+        let arrayMatrix = (gridPathElement.value)? JSON.parse(gridPathElement.value) : []
+        let isBlocked = false
+        
         this.gridcells = {}
 
-        for( let row = 0; row < numRows; row++) {
-            for( let col = 0; col < numCols; col++) {
+        for ( let row = 0; row < numRows; row++) {
+            for ( let col = 0; col < numCols; col++) {
             
-                const gridcell = new GridCell({ grid: this, row, col })
+                if (gridPathElement.value) isBlocked = arrayMatrix[row][col] == 1
+            
+                const gridcell = new GridCell({ grid: this, row, col, isBlocked })
                 gridcell.render()
 
                 this.gridcells[ gridcell.position ] = gridcell
             }
-
         }
-    }
-    
-    #buildGridSvg() {
-        const { svgElement, gridWidth, gridHeight, gridMarginX, gridMarginY } = this
-
-        Object.assign( svgElement.style, {
-            width: `${ gridWidth }px`,
-            height: `${ gridHeight }px`,
-            left: `${ gridMarginX }px`,
-            top: `${ gridMarginY }px`,
-        })
-
-        svgElement.setAttribute('viewbox', `0 0 ${gridWidth} ${gridHeight}`)
     }
 
     draw() {
-        const gridDraw = new GridDraw({ grid: this })
+        const { gridDraw } = this
+
         gridDraw.draw()
     }
 }

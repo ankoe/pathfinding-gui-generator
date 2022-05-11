@@ -1,15 +1,74 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<title>Pathfinding GUI Generator</title>
+	<link rel="stylesheet" href="https://unpkg.com/flowbite@1.4.5/dist/flowbite.min.css" />
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
+
 <body>
-	<svg id="gridSvg">
-		<path d=""></path>
-	</svg>
+	<div class="bg-gray-200 flex justify-between p-2">
+		<div class="space-y-2">
+			<div class="flex justify-between">
+				<label class="mr-3 w-32">Width</label>
+				<input type="number" id="containerWidth"
+					class="block p-1 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					placeholder="Width" />
+			</div>
+			<div class="flex justify-between">
+				<label class="mr-3 w-32">Height</label>
+				<input type="number" id="containerHeight"
+					class="block p-1 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					placeholder="Height" />
+			</div>
+			<div class="flex justify-between">
+				<label class="mr-3 w-32">Cell Size</label>
+				<input type="number" id="cellSize"
+					class="block p-1 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					placeholder="Cell Size" />
+			</div>
+		</div>
+		<div class="space-y-2">
+			<div class="flex justify-between">
+				<label class="mr-3 w-32">Background</label>
+				<input id="imageImport"
+					class="block w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+					type="file"
+					accept=".png, .jpg, .jpeg">
+			</div>
+			<div class="flex justify-end">
+				<button type="button" id="imageRemove"
+					class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Remove
+					background</button>
+			</div>
+		</div>
+		<div class="space-y-2 grow">
+			<div class="flex justify-between">
+				<label class="mr-3 w-32">Import</label>
+				<input id="fileImport"
+					class="block w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+					type="file"
+					accept=".json">
+			</div>
+			<div class="flex justify-end">
+				<label class="mr-3 w-32">Export</label>
+				<button type="button" id="fileExport"
+					class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Download
+					file</button>
+			</div>
+		</div>
+		<div class="space-y-2 flex grow">
+			<textarea id="gridPath" rows="4"
+				class="block p-1.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				placeholder="array matrix grid" readonly></textarea>
+		</div>
+	</div>
 	<div id="grid"></div>
+
+	<script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
 	<script type="module" src="scripts.js"></script>
 </body>
+
 </html>

@@ -1,7 +1,6 @@
 body {
     background: black;
     margin: 0cm;
-    overflow: hidden;
 }
 .gridcell {
     float: left;
@@ -25,4 +24,8 @@ svg path {
     fill: none;
     stroke-width: 3px;
     stroke: red;
+}
+
+#gridPath {
+    resize: none;
 }

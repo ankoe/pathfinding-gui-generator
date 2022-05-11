@@ -34,11 +34,11 @@ class GridCell {
     }
 
     #renderHtmlStyling() {
-        const { gridcellElement, grid: { settings: { cellSize, borderSize, borderColor } } } = this
+        const { gridcellElement, grid: { cellSizeElement, settings: { cellSize, borderSize, borderColor } } } = this
 
         Object.assign( gridcellElement.style, {
-            width: `${ cellSize }px`,
-            height: `${ cellSize  }px`,
+            width: `${ cellSizeElement.value }px`,
+            height: `${ cellSizeElement.value  }px`,
             border: `${ borderSize }px solid ${ borderColor }`,
         })
 
@@ -46,9 +46,9 @@ class GridCell {
     }
 
     #renderAttribute() {
-        const { grid: {numCols, numRows } } = this
+        const { grid: {numCols, numRows }, isBlocked } = this
 
-        this.isBlocked = false
+        this.isBlocked = isBlocked
         this.isOutCell = this.position === '0-0'
         this.isInCell = this.position === `${ numRows - 1 }-${ numCols - 1 }`
     }
