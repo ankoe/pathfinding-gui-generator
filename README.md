@@ -5,12 +5,11 @@
 - Get last Array Matrix Coordinate
 - Upload Array Matrix
 
-## Todo
-- create control layer
-
 ## Data Show
 - windows size Now
-- Windows size When created path
+- background image
 - size cell
-- start location
-- end location
+- start point location
+- end point location
+
+Some feature still have bug, feel free to use.
